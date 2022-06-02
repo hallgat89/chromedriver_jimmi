@@ -33,7 +33,7 @@ public class Downloader {
 
     private void handleArticlesOnPage(MainPage page) {
         List<Article> articles = page.getArticlesOnPage();
-        articles.stream().forEach(e -> System.out.println(e.getTitle()));
+        articles.stream().forEach(e -> System.out.println(e.getTitle()+": "+e.getDate()));
     }
 
     @AfterEach

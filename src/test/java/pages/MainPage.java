@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MainPage {
+public class MainPage extends BasePage {
     public static final String START_URL = "https://www.jimmi.hu/";
     public static final String PAGE_PARAM = "?page=%d";
     public static final String CONTENT_BLOCK = "//div[@id='text']";
@@ -16,19 +16,23 @@ public class MainPage {
     public static final List<String> ignore = Arrays.asList();
     public static final By NEXT_BUTTON = By.xpath("//span[@id='pageforward']");
     public static final By PREV_BUTTON = By.xpath("//span[@id='pageback']");
-    private final WebDriver driver;
 
     public MainPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
     public void open() {
         driver.get(START_URL);
     }
-
     public MainPage nextPage() {
         this.driver.findElement(NEXT_BUTTON).click();
         return new MainPage(this.driver);
+    }
+    public boolean hasNextPage() {
+       return isElementPresent(NEXT_BUTTON);
+    }
+    public boolean hasPrevPage() {
+        return isElementPresent(PREV_BUTTON);
     }
 
     public MainPage prevPage() {
@@ -43,7 +47,6 @@ public class MainPage {
             open();
         }
     }
-
     public List<Article> getArticlesOnPage() {
         return driver.findElements(ARTICLES).stream().map(e -> new Article(e)).collect(Collectors.toList());
     }
