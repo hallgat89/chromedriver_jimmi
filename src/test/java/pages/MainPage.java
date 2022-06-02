@@ -14,7 +14,8 @@ public class MainPage {
     public static final String CONTENT_BLOCK = "//div[@id='text']";
     public static final By ARTICLES = By.xpath(CONTENT_BLOCK + "/div[@class='day']");
     public static final List<String> ignore = Arrays.asList();
-    public static final By NEXT_BUTTON = By.xpath("");
+    public static final By NEXT_BUTTON = By.xpath("//span[@id='pageforward']");
+    public static final By PREV_BUTTON = By.xpath("//span[@id='pageback']");
     private final WebDriver driver;
 
     public MainPage(WebDriver driver) {
@@ -23,6 +24,16 @@ public class MainPage {
 
     public void open() {
         driver.get(START_URL);
+    }
+
+    public MainPage nextPage() {
+        this.driver.findElement(NEXT_BUTTON).click();
+        return new MainPage(this.driver);
+    }
+
+    public MainPage prevPage() {
+        this.driver.findElement(PREV_BUTTON).click();
+        return new MainPage(this.driver);
     }
 
     public void open(int pageNumber) {

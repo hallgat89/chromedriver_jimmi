@@ -12,24 +12,33 @@ import java.util.List;
 
 public class Downloader {
 
-    private MainPage page;
+    WebDriver driver;
 
     @BeforeEach
     public void setUp() {
-        page = new MainPage(getDriver());
+        driver = getDriver();
     }
 
     @Test
     public void download() throws InterruptedException {
-        page.open();
-        List<Article> articles = page.getArticlesOnPage();
+        MainPage page = new MainPage(driver);
 
-        articles.stream().forEach(e->System.out.println(e.getTitle()));
+        page.open();
+        handleArticlesOnPage(page);
+        page = page.prevPage();
+        handleArticlesOnPage(page);
+
+        System.out.println();
+    }
+
+    private void handleArticlesOnPage(MainPage page) {
+        List<Article> articles = page.getArticlesOnPage();
+        articles.stream().forEach(e -> System.out.println(e.getTitle()));
     }
 
     @AfterEach
     public void destruct() {
-        page.closeBrowser();
+        driver.close();
     }
 
     public WebDriver getDriver() {
