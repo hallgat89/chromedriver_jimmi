@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import pages.Article;
 import pages.MainPage;
+
+import java.util.List;
 
 public class Downloader {
 
@@ -19,7 +22,9 @@ public class Downloader {
     @Test
     public void download() throws InterruptedException {
         page.open();
-        System.out.println("BREAK");
+        List<Article> articles = page.getArticlesOnPage();
+
+        articles.stream().forEach(e->System.out.println(e.getTitle()));
     }
 
     @AfterEach

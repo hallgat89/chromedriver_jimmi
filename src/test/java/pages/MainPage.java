@@ -1,15 +1,20 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import javax.xml.xpath.XPath;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainPage {
     public static final String START_URL = "https://www.jimmi.hu/";
-    public static final String CONTENT_BLOCK = "";
+    public static final String PAGE_PARAM = "?page=%d";
+    public static final String CONTENT_BLOCK = "//div[@id='text']";
+    public static final By ARTICLES = By.xpath(CONTENT_BLOCK + "/div[@class='day']");
     public static final List<String> ignore = Arrays.asList();
-    public static final String NEXT_BUTTON = "";
+    public static final By NEXT_BUTTON = By.xpath("");
     private final WebDriver driver;
 
     public MainPage(WebDriver driver) {
@@ -18,6 +23,18 @@ public class MainPage {
 
     public void open() {
         driver.get(START_URL);
+    }
+
+    public void open(int pageNumber) {
+        if (pageNumber > 0) {
+            driver.get(String.format(START_URL + PAGE_PARAM, pageNumber));
+        } else {
+            open();
+        }
+    }
+
+    public List<Article> getArticlesOnPage() {
+        return driver.findElements(ARTICLES).stream().map(e -> new Article(e)).collect(Collectors.toList());
     }
 
     public void closeBrowser() {
