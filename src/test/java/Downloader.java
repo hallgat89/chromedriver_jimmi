@@ -34,6 +34,7 @@ public class Downloader {
             handleArticlesOnPage(page);
             page = page.nextPage();
         }
+        handleArticlesOnPage(page);
         pageAccumulator.flushAll();
     }
 
@@ -53,6 +54,7 @@ public class Downloader {
         WebDriver driver = null;
         WebDriverManager.chromedriver().browserVersion("77.0.3865.40").setup();
         ChromeOptions options = new ChromeOptions();
+        options.addArguments("headless"); // hides browser window
         options.addArguments("start-maximized");
         options.addArguments("enable-automation");
         options.addArguments("--no-sandbox");

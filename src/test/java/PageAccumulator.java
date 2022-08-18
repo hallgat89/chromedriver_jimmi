@@ -13,8 +13,8 @@ public class PageAccumulator {
     private final String targetFile;
     private final String targetType = ".html";
 
-    private final String openDoc = "<html><head>%d</head><body>";
-    private final String endDoc = "</body></html>";
+    private final String openDoc = "<html>\n<head>%d</head>\n<body>";
+    private final String endDoc = "\n</body>\n</html>";
     private Map<Integer, List<Article>> articles = new HashMap<>();
 
     public PageAccumulator(String targetPath, String targetFile) {
@@ -82,7 +82,7 @@ public class PageAccumulator {
             try {
                 bw.write("\n<div class=\"article\">\n");
                 bw.write(e.toString());
-                bw.write("\n<\\div>\n");
+                bw.write("\n</div>\n");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
