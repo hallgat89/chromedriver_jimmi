@@ -25,9 +25,10 @@ public class Downloader {
         MainPage page = new MainPage(driver);
 
         page.open(OLDEST_PAGE_NUMBER);
-        handleArticlesOnPage(page);
-        page = page.nextPage();
-        handleArticlesOnPage(page);
+        for(int i=0;i<1;i++) { // TODO do something reasonable
+            handleArticlesOnPage(page);
+            page = page.nextPage();
+        }
 
         System.out.println();
     }

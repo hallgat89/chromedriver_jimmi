@@ -12,8 +12,10 @@ import java.util.stream.Collectors;
 public class Article {
     private final WebElement thisArticle;
 
-    private static final By ATITLE = By.xpath("./p[@class='title']");
-    private static final By ADATE = By.xpath("./p[@class='smalldate']");
+    private static final By ATITLE = By.xpath(".//p[@class='title']");
+    private static final By ADATE = By.xpath(".//p[@class='smalldate']");
+
+    private static final By OLDDATE = By.xpath(".//p[@class='date']");
 
     private final String title;
     private final String date;
@@ -30,7 +32,7 @@ public class Article {
             date = thisArticle.findElement(ADATE).getText();
         } catch (NoSuchElementException e) {
             try {
-                date = thisArticle.findElement(ATITLE).getText();
+                date = thisArticle.findElement(OLDDATE).getText();
             } catch (NoSuchElementException ee) {
                 date = "no date";
             }
@@ -44,7 +46,6 @@ public class Article {
             title = thisArticle.findElement(ATITLE).getText();
         } catch (NoSuchElementException e) {
             title = defaultTitle;
-
         }
         return title;
     }
