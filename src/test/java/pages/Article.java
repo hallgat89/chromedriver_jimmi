@@ -69,4 +69,9 @@ public class Article {
         return cal.get(Calendar.YEAR);
     }
 
+    @Override
+    public String toString() {
+        return thisArticle.getText();
+    }
+
 }

@@ -8,12 +8,14 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import pages.Article;
 import pages.MainPage;
 
+import java.io.File;
 import java.util.List;
 
 public class Downloader {
 
     public static final int OLDEST_PAGE_NUMBER = 23;
     WebDriver driver;
+    PageAccumulator pageAccumulator;
 
     @BeforeEach
     public void setUp() {
@@ -22,6 +24,7 @@ public class Downloader {
 
     @Test
     public void download() throws InterruptedException {
+        pageAccumulator = new PageAccumulator("/output/");
         MainPage page = new MainPage(driver);
 
         page.open(OLDEST_PAGE_NUMBER);
@@ -30,14 +33,16 @@ public class Downloader {
         for (int i = 0; i < 10; i++) { // TODO do something reasonable
             handleArticlesOnPage(page);
             page = page.nextPage();
+            pageAccumulator.flushAll(); // TODO move after testing
         }
-
         System.out.println();
     }
 
     private void handleArticlesOnPage(MainPage page) {
         List<Article> articles = page.getArticlesOnPage();
         articles.stream().forEach(e -> System.out.println(e.getTitle() + ": " + e.getDateString()));
+        articles.stream().forEach(e -> pageAccumulator.addArticle(e));
+        pageAccumulator.flushOld();
     }
 
     @AfterEach
@@ -46,6 +51,12 @@ public class Downloader {
     }
 
     public WebDriver getDriver() {
+        // TODO del this shit
+        File isActuallyADir=new File("target/output");
+        isActuallyADir.mkdirs();
+
+
+
         WebDriver driver = null;
         WebDriverManager.chromedriver().browserVersion("77.0.3865.40").setup();
         ChromeOptions options = new ChromeOptions();
