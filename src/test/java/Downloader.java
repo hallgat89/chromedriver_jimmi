@@ -12,6 +12,7 @@ import java.util.List;
 
 public class Downloader {
 
+    public static final int OLDEST_PAGE_NUMBER = 23;
     WebDriver driver;
 
     @BeforeEach
@@ -23,9 +24,9 @@ public class Downloader {
     public void download() throws InterruptedException {
         MainPage page = new MainPage(driver);
 
-        page.open();
+        page.open(OLDEST_PAGE_NUMBER);
         handleArticlesOnPage(page);
-        page = page.prevPage();
+        page = page.nextPage();
         handleArticlesOnPage(page);
 
         System.out.println();

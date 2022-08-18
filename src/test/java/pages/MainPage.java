@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainPage extends BasePage {
-    public static final String START_URL = "https://www.jimmi.hu/";
+    public static final String BASE_URL = "https://www.jimmi.hu/";
     public static final String PAGE_PARAM = "?page=%d";
     public static final String CONTENT_BLOCK = "//div[@id='text']";
     private static final String ARTICLES_SEL = CONTENT_BLOCK + "/div[@class='day']";
     public static final By ARTICLES = By.xpath(ARTICLES_SEL);
     public static final List<String> ignore = Arrays.asList();
-    public static final By NEXT_BUTTON = By.xpath("//span[@id='pageforward']");
+    public static final By NEXT_BUTTON = By.xpath("//span[@class='pageforward']");
     public static final By PREV_BUTTON = By.xpath("//span[@id='pageback']");
 
     // FOR PAGE CLEANING
@@ -27,7 +27,7 @@ public class MainPage extends BasePage {
     }
 
     public void open() {
-        driver.get(START_URL);
+        driver.get(BASE_URL);
     }
 
     public MainPage nextPage() {
@@ -50,7 +50,7 @@ public class MainPage extends BasePage {
 
     public void open(int pageNumber) {
         if (pageNumber > 0) {
-            driver.get(String.format(START_URL + PAGE_PARAM, pageNumber));
+            driver.get(String.format(BASE_URL + PAGE_PARAM, pageNumber));
         } else {
             open();
         }
@@ -61,8 +61,6 @@ public class MainPage extends BasePage {
                 .filter(e -> IGNORE_CLASSES.contains(e.getAttribute("class"))).collect(Collectors.toList());
 
         elementsToRemove.forEach(e->removeElement(e));
-
-        System.out.println();
     }
 
     public List<Article> getArticlesOnPage() {
