@@ -9,6 +9,7 @@ import java.util.*;
 
 public class PageAccumulator {
 
+    private final String targetPath;
     private final String targetFile;
     private final String targetType = ".html";
 
@@ -16,8 +17,9 @@ public class PageAccumulator {
     private final String endDoc = "</body></html>";
     private Map<Integer, List<Article>> articles = new HashMap<>();
 
-    public PageAccumulator(String targetFile) {
+    public PageAccumulator(String targetPath, String targetFile) {
         this.targetFile = targetFile;
+        this.targetPath = targetPath;
     }
 
     public void addArticle(Article article) {
@@ -45,18 +47,22 @@ public class PageAccumulator {
         while (articles.keySet().size() > 0) {
             Integer oldestYear = articles.keySet().stream().min(Integer::compareTo).get();
             List<Article> currentList = articles.get(oldestYear);
+            articles.remove(oldestYear);
         }
     }
 
     private void writeArticles(Integer year, List<Article> outArticles) {
-        String fileName=year.toString() + targetType;
-        File isActuallyADir=new File("dickbutt");
-        isActuallyADir.mkdirs();
-        File file = new File(isActuallyADir,fileName);
+        String fileName = year.toString() + targetType;
+
+        File targetFolder = new File(targetPath);
+        targetFolder.mkdirs();
+
+        File file = new File(targetFolder, fileName);
         try (
                 FileWriter fw = new FileWriter(file);
                 BufferedWriter bw = new BufferedWriter(fw);
         ) {
+            file.createNewFile();
             writeDocument(year, outArticles, bw);
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,9 +77,12 @@ public class PageAccumulator {
     }
 
     private void includeArticles(List<Article> outArticles, BufferedWriter bw) {
+        Collections.sort(outArticles);
         outArticles.forEach(e -> {
             try {
+                bw.write("\n<div class=\"article\">\n");
                 bw.write(e.toString());
+                bw.write("\n<\\div>\n");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

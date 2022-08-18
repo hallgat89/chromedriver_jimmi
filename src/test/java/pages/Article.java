@@ -8,9 +8,8 @@ import utils.DateParser;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Article {
-    private final WebElement thisArticle;
-
+public class Article implements Comparable{
+    private final String innerHTML;
     private static final By ATITLE = By.xpath(".//p[@class='title']");
     private static final By ADATE = By.xpath(".//p[@class='smalldate']");
 
@@ -21,13 +20,13 @@ public class Article {
     private final Date date;
 
     public Article(WebElement fromElement) {
-        thisArticle = fromElement;
-        this.dateString = tryFetchDate();
-        this.title = tryFetchTitle(dateString);
+        this.dateString = tryFetchDate(fromElement);
+        this.title = tryFetchTitle(fromElement,dateString);
         date = DateParser.fromString(dateString);
+        this.innerHTML=fromElement.getAttribute("innerHTML");
     }
 
-    public String tryFetchDate() {
+    public String tryFetchDate(WebElement thisArticle) {
         String date;
         try {
             date = thisArticle.findElement(ADATE).getText();
@@ -41,7 +40,7 @@ public class Article {
         return date;
     }
 
-    public String tryFetchTitle(String defaultTitle) {
+    public String tryFetchTitle(WebElement thisArticle,String defaultTitle) {
         String title;
         try {
             title = thisArticle.findElement(ATITLE).getText();
@@ -71,7 +70,11 @@ public class Article {
 
     @Override
     public String toString() {
-        return thisArticle.getText();
+        return this.innerHTML;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        return this.date.compareTo(((Article)o).date);
+    }
 }
