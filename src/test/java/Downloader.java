@@ -25,7 +25,9 @@ public class Downloader {
         MainPage page = new MainPage(driver);
 
         page.open(OLDEST_PAGE_NUMBER);
-        for(int i=0;i<1;i++) { // TODO do something reasonable
+
+//        while (page.hasNextPage()) {
+        for (int i = 0; i < 10; i++) { // TODO do something reasonable
             handleArticlesOnPage(page);
             page = page.nextPage();
         }
@@ -35,7 +37,7 @@ public class Downloader {
 
     private void handleArticlesOnPage(MainPage page) {
         List<Article> articles = page.getArticlesOnPage();
-        articles.stream().forEach(e -> System.out.println(e.getTitle()+": "+e.getDate()));
+        articles.stream().forEach(e -> System.out.println(e.getTitle() + ": " + e.getDateString()));
     }
 
     @AfterEach

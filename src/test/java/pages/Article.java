@@ -3,11 +3,10 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import utils.DateParser;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Article {
     private final WebElement thisArticle;
@@ -18,12 +17,14 @@ public class Article {
     private static final By OLDDATE = By.xpath(".//p[@class='date']");
 
     private final String title;
-    private final String date;
+    private final String dateString;
+    private final Date date;
 
     public Article(WebElement fromElement) {
         thisArticle = fromElement;
-        this.date = tryFetchDate();
-        this.title = tryFetchTitle(date);
+        this.dateString = tryFetchDate();
+        this.title = tryFetchTitle(dateString);
+        date = DateParser.fromString(dateString);
     }
 
     public String tryFetchDate() {
@@ -54,8 +55,18 @@ public class Article {
         return this.title;
     }
 
-    public String getDate() {
+    public String getDateString() {
+        return this.dateString;
+    }
+
+    public Date getDate() {
         return this.date;
+    }
+
+    public Integer getYear() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.YEAR);
     }
 
 }
