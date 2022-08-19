@@ -47,6 +47,7 @@ public class PageAccumulator {
         while (articles.keySet().size() > 0) {
             Integer oldestYear = articles.keySet().stream().min(Integer::compareTo).get();
             List<Article> currentList = articles.get(oldestYear);
+            writeArticles(oldestYear,currentList);
             articles.remove(oldestYear);
         }
     }
